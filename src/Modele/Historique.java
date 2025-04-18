@@ -2,10 +2,13 @@ package Modele;
 import java.util.ArrayList;
 import java.util.Stack;
 public class Historique {
-    Stack<ArrayList<Coup>> previous;
-    ArrayList<Coup> current;
+    Stack<ArrayList<Cell>> previous;
+    ArrayList<Cell> current;
+    Stack<ArrayList<Cell>> next;
+
     Historique(){
         previous = new Stack<>();
+        next = new Stack<>();
         current = null;
     }
 
@@ -13,7 +16,7 @@ public class Historique {
         if ( current == null ){
             current = new ArrayList<>();
         }
-        current.add(new Coup(line, column));
+        current.add(new Cell(line, column));
     }
 
     public void insert(){
@@ -21,16 +24,28 @@ public class Historique {
             return;
         }
         previous.add(current);
+        next = new Stack<>();
         current = null;
     }
 
-    public ArrayList<Coup> get(){
-        return previous.pop();
+    public ArrayList<Cell> getPrev(){
+        ArrayList<Cell> currentCoup = previous.pop();
+        next.add(currentCoup);
+        return currentCoup;
+    }
+
+    public ArrayList<Cell> getNext(){
+        ArrayList<Cell> currentCoup = next.pop();
+        previous.add(currentCoup);
+        return currentCoup;
     }
 
     public boolean canUndo(){
         return  ! previous.isEmpty();
     }
 
+    public boolean canRedo(){
+        return  ! next.isEmpty();
+    }
 
 }

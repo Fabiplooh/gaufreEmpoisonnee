@@ -1,8 +1,8 @@
 package Modele;
 
-public class Coup{
+public class Cell {
     int line, column;
-    public Coup(int l, int c){
+    public Cell(int l, int c){
         this.line = l;
         this.column = c;
     }
