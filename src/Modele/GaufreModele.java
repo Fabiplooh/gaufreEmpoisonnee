@@ -3,12 +3,17 @@ package Modele;
 import java.util.Stack;
 
 public class GaufreModele {
+    private static final int DEFAULT_LINE_POISON = 0;
+    private static final int DEFAULT_COLUMN_POISON = 0;
     public int [][] gaufre; //0 vide; 1 remplis; 2 empoisonnée
     private int nbLigne;
     private int nbColonne;
     private boolean fin = false;
-    private Stack<Coup> historyCoups;
-
+    private Historique my_history;
+    private final int POISON = 2;
+    private final int REMPLIE = 0;
+    private final int VIDE = 1;
+    private final int INVALID = -1;
 
     /*
     Par défaut notre gaufre est remplis et fait une taille de 4 ligne et 6 colonne
@@ -18,104 +23,93 @@ public class GaufreModele {
         nbLigne = 4;
         nbColonne = 6;
         gaufre = new int[nbLigne][nbColonne];
-        historyCoups = new Stack<Coup>();
-
-        for(int i=0; i<nbLigne; i++){
-            for (int j=0; j<nbColonne; j++){
-                gaufre[i][j] = 1;
-            }
-        }
-        gaufre[0][0] = 2;
+        my_history = new Historique();
+        gaufre[DEFAULT_LINE_POISON][DEFAULT_COLUMN_POISON] = POISON;
     }
 
     public GaufreModele(int x, int y){
         nbLigne = x;
         nbColonne = y;
-        historyCoups = new Stack<Coup>();
+        my_history = new Historique();
         gaufre = new int[nbLigne][nbColonne];
-
-        for(int i=0; i<nbLigne; i++){
-            for (int j=0; j<nbColonne; j++){
-                gaufre[i][j] = 1;
-            }
-        }
-        gaufre[0][0] = 2;
+        gaufre[DEFAULT_LINE_POISON][DEFAULT_COLUMN_POISON] = POISON;
     }
 
-    public void Joue(int x, int y){
-        if (x>0 && x <= nbLigne-1 && y>0 && y <= nbColonne-1){
-            if (gaufre[x][y] == 2){
-                fin = true;
-                return;
-            }
-            int previousX = nbLigne -1;
-            int previousY = nbColonne -1;
-            boolean flag = true;
-            for (int i=x; i<nbLigne; i++){
-                for (int j=y; j<nbColonne; j++){
-                    if (gaufre[i][j] == 1){
-                        gaufre[i][j] = 0;
-                    }
-                    else if (flag){
-                        previousX = i;
-                        previousY = j;
-                        flag = false;
-                    }
+    public boolean canPlay(int line, int column){
+        return isValidCell(line, column) && gaufre[line][column] == REMPLIE || gaufre[line][column] == POISON;
+    }
+
+    public void play(int line, int column){
+        if ( ! canPlay(line, column)) {
+            return;
+        }
+        for (int l=line; l<nbLigne; l++){
+            boolean line_end = false;    
+            for (int c=column; c<nbColonne; c++){
+                switch (getCase(l,c)){
+                    case REMPLIE:
+                        my_history.add(l,c);
+                        gaufre[l][c] = VIDE;
+                        break;
+
+                    case VIDE:
+                        line_end = true;
+                        break;
+
+                    case POISON:
+                        fin = true;
+                        return;
+
+                    default: 
+                        System.exit(1);
                 }
-            }
-            Coup push = new Coup(x,y, previousX, previousY);
-            historyCoups.push(push);
-        }
-    }
-
-    public int GetCase(int x, int y){
-        return gaufre[x][y];
-    }
-
-    private boolean PeutAnnuler(){
-        return !historyCoups.isEmpty();
-    }
-
-    public void Annule(){
-        if (PeutAnnuler()){
-            Coup pop = historyCoups.pop();
-            for (int i=pop.x; i< pop.previousX; i++){
-                for (int j=pop.y; j< pop.previousY; j++){
-                    gaufre[i][j] = 1;
+                if (line_end){
+                    break;
                 }
             }
         }
+        my_history.insert();
     }
 
-    class Coup{
-        int x,y;
-        int previousX,previousY;
-        public Coup(int x, int y, int previousX, int previousY){
-            this.x = x;
-            this.y = y;
-            this.previousX = previousX;
-            this.previousY = previousY;
+    private boolean isValidCell(int line, int column){
+        return line >= 0 && line < nbLigne && column >= 0 && column < nbColonne;
+    }
+
+    public int getCase(int line, int column){
+        if (isValidCell(line, column)) {
+            return gaufre[line][column];
         }
+        return INVALID;
+    }
+
+    private boolean canUndo(){
+        return my_history.canUndo();
+    }
+
+    public void undo(){
+        if (! canUndo()) {
+            return;
+        }
+        for (Coup to_remove : my_history.get()){
+            gaufre[to_remove.line][to_remove.column] = REMPLIE;
+
+        };
     }
 
     public boolean isFin(){
         return fin;
     }
 
-    public void Reset(){
-        for (int i=0; i<nbLigne; i++){
-            for (int j=0; j<nbColonne; j++){
-                gaufre[i][j] = 1;
-            }
-        }
-        gaufre[0][0] = 2;
-        historyCoups = new Stack<Coup>();
+    public void reset(){
+        gaufre = new int[nbLigne][nbColonne];
+        gaufre[DEFAULT_LINE_POISON][DEFAULT_COLUMN_POISON] = POISON;
+        my_history = new Historique();
     }
 
-    public int GetLine(){
+    public int getLine(){
         return nbLigne;
     }
-    public int GetColonne(){
+    public int getColonne(){
         return nbColonne;
     }
 
