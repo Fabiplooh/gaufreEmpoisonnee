@@ -16,10 +16,11 @@ public class GaufreModele extends Observable {
     private final int REMPLIE = 0;
     private final int VIDE = 1;
     private final int INVALID = -1;
-
+    private int current_player = 0;
     /*
     Par défaut notre gaufre est remplis et fait une taille de 4 ligne et 6 colonne
      */
+
 
     public GaufreModele(){
         nbLigne = 4;
@@ -87,6 +88,7 @@ public class GaufreModele extends Observable {
         }
         my_history.insert();
         if (game_has_change){
+            current_player = 1 - current_player;
             metAJour();
         }
     }
@@ -140,6 +142,13 @@ public class GaufreModele extends Observable {
             }
             System.out.println();
         }
+    }
+
+    public String getCurrentPlayer(){
+        if (current_player == 0){
+            return " Joueur 1";
+        }
+        return "Joueur 2";
     }
 
 }
