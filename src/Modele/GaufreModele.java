@@ -123,7 +123,6 @@ public class GaufreModele extends Observable {
         for (Cell to_remove : my_history.getPrev()) {
             gaufre[to_remove.line][to_remove.column] = REMPLIE;
         }
-        metAJour();
     }
 
 
@@ -134,7 +133,6 @@ public class GaufreModele extends Observable {
         for (Cell to_redo : my_history.getNext()) {
             gaufre[to_redo.line][to_redo.column] = VIDE;
         }
-        metAJour();
     }
 
     public boolean isFin() {
@@ -184,7 +182,7 @@ public class GaufreModele extends Observable {
                 for (Cell cur_coup : cur_list) {
                     my_writter.print( "," + cur_coup.line + "," + cur_coup.column);
                 }
-                my_writter.println("-7");
+                my_writter.println();
                 current++;
             } catch (Exception e) {
                 Collections.reverse(moment);
@@ -213,9 +211,9 @@ public class GaufreModele extends Observable {
             }
             my_writter.println();
         }
-        my_writter.println("-3");
+        my_writter.println("passé");
         save_historique(my_writter, my_history.previous);
-        my_writter.println("-4");
+        my_writter.println("futur");
         save_historique(my_writter, my_history.next);
         my_writter.close();
     }
@@ -223,37 +221,58 @@ public class GaufreModele extends Observable {
 
 
     int read_historique(Scanner my_scanner, Stack<ArrayList<Cell>> moment, boolean passe) throws Exception{
-        int current_line = 0;
+        int current_line;
         int current_col;
         while (my_scanner.hasNextInt() ){
-            current_line = my_scanner.nextInt();
-            if (current_line == -4 && passe ){
+            if (current_is_explore == -4 && passe ){
                 break;
             }
-            if (! my_scanner.hasNextInt() ){
-                System.err.println("Il manque la colonne");
+            if (current_is_explore == -2){
+                is_explore = false;
+            } else if (current_is_explore == -1){
+                is_explore = true;
+            } else{
+                System.err.println("Il manque un coup");
+                my_scanner.close();
+                throw new Exception();
+            }
+            if (! my_scanner.hasNextInt()){
+                System.err.println("Il manque un coup");
+                my_scanner.close();
+                throw new Exception();
+            }
+            current_line = my_scanner.nextInt();
+            if (! my_scanner.hasNextInt() || current_line < -6){
+                System.err.println("Il manque un coup");
                 my_scanner.close();
                 throw new Exception();
             }
             current_col= my_scanner.nextInt();
-            if (current_col == -4 && passe ){
-                System.err.println("Il manque la colonne");
+            if (current_col < -6 ){
+                System.err.println("Il manque un coup");
                 my_scanner.close();
                 throw new Exception();
             }
-            ArrayList<Cell> temporary = new ArrayList<>();
-            temporary.add(new Cell(current_line, current_col));
-            while (true){
-                current_line = my_scanner.nextInt();
-                if (current_line == -7){
-                    break;
+            ArrayList<Point> temporary = new ArrayList<>();
+            if (is_explore) {
+                temporary.add(new Point(current_line, current_col));
+                while (true){
+                    current_line = my_scanner.nextInt();
+                    if (current_line == -7){
+                        break;
+                    }
+                    current_col= my_scanner.nextInt();
+                    temporary.add(new Point(current_line, current_col));
                 }
-                current_col= my_scanner.nextInt();
-                temporary.add(new Cell(current_line, current_col));
+                moment.add(new Coup(is_explore, temporary));
+
+            } else{
+                temporary.add(new Point(current_line, current_col));
+                moment.add(new Coup(is_explore, temporary));
+
             }
-            moment.add(temporary);
         }
-        return current_line;
+        return current_is_explore;
     }
 
     void get_historique(Scanner my_scanner) throws Exception{
@@ -264,7 +283,7 @@ public class GaufreModele extends Observable {
         }
         int current_is_explore = -8;
         try{
-            current_is_explore = read_historique(my_scanner, my_history.previous, true);
+            current_is_explore = read_historique(my_scanner, historique.le_passe, true);
         } catch (Exception e){
             throw e;
         }
@@ -274,7 +293,7 @@ public class GaufreModele extends Observable {
             throw new Exception();
         }
         try{
-            read_historique(my_scanner, my_history.next, false);
+            current_is_explore = read_historique(my_scanner, historique.le_futur, false);
         } catch (Exception e){
             throw e;
         }
@@ -316,7 +335,7 @@ public class GaufreModele extends Observable {
         }
     }
 
-    public GaufreModele(String fichier) throws Exception {
+    GaufreModele(String fichier) throws Exception {
         FileInputStream my_file;
         Scanner my_scanner;
         try{
