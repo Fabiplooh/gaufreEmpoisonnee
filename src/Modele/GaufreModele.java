@@ -1,9 +1,11 @@
 package Modele;
 
+import Global.OurConfiguration;
 import Patterns.Observable;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,11 +30,37 @@ public class GaufreModele extends Observable {
      */
 
 
-    public GaufreModele() {
-        this(4,6);
+    public GaufreModele() throws Exception {
+        if (OurConfiguration.instance().getProperty("new_game").compareTo("true") == 0){
+            int lines =  Integer.parseInt(OurConfiguration.instance().getProperty("line"));
+            int columns = Integer.parseInt(OurConfiguration.instance().getProperty("column"));
+            initGaufreWithDim(lines, columns);
+        } else {
+            initGaufreWithFile(OurConfiguration.instance().getProperty("input_file"));
+        }
     }
 
-    public GaufreModele(int x, int y) {
+    public void initGaufreWithFile(String fichier) throws Exception {
+        FileInputStream my_file;
+        Scanner my_scanner;
+        try{
+            my_file = new FileInputStream(fichier);
+            my_scanner = new Scanner(my_file);
+        } catch( Exception e){
+            throw e;
+        }
+        my_scanner.useDelimiter("[,\\s\\n]+");
+        try{
+            get_dimension(my_scanner);
+            get_map(my_scanner);
+            get_historique(my_scanner);
+        } catch (Exception e){
+            throw e;
+        }
+        my_scanner.close();
+    }
+
+    private void initGaufreWithDim(int x, int y) {
         nbLigne = x;
         nbColonne = y;
         my_history = new Historique();
@@ -196,7 +224,7 @@ public class GaufreModele extends Observable {
     }
 
     public void save() throws Exception {
-        save("plouby.txt");
+        save(OurConfiguration.instance().getProperty("output_file"));
     }
 
     public void save(String fichier) throws Exception {
@@ -318,24 +346,5 @@ public class GaufreModele extends Observable {
         }
     }
 
-    public GaufreModele(String fichier) throws Exception {
-        FileInputStream my_file;
-        Scanner my_scanner;
-        try{
-            my_file = new FileInputStream(fichier);
-            my_scanner = new Scanner(my_file);
-        } catch( Exception e){
-            throw e;
-        }
-        my_scanner.useDelimiter("[,\\s\\n]+");
-        try{
-            get_dimension(my_scanner);
-            get_map(my_scanner);
-            get_historique(my_scanner);
-        } catch (Exception e){
-            throw e;
-        }
-        my_scanner.close();
-    }
 
 }

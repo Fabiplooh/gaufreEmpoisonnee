@@ -14,6 +14,10 @@ public class AdaptateurSauve implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        modele.save();
+        try{
+            modele.save();
+        } catch (Exception ex){
+            return;
+        }
     }
 }
