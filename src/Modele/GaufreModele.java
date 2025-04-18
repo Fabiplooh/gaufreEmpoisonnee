@@ -1,8 +1,10 @@
 package Modele;
 
+import Patterns.Observable;
+
 import java.util.Stack;
 
-public class GaufreModele {
+public class GaufreModele extends Observable {
     private static final int DEFAULT_LINE_POISON = 0;
     private static final int DEFAULT_COLUMN_POISON = 0;
     public int [][] gaufre; //0 vide; 1 remplis; 2 empoisonnée
@@ -55,6 +57,7 @@ public class GaufreModele {
         if ( ! canPlay(line, column)) {
             return;
         }
+        boolean game_has_change = false;
         for (int l=line; l<nbLigne; l++){
             boolean line_end = false;    
             for (int c=column; c<nbColonne; c++){
@@ -62,6 +65,7 @@ public class GaufreModele {
                     case REMPLIE:
                         my_history.add(l,c);
                         gaufre[l][c] = VIDE;
+                        game_has_change = true;
                         break;
 
                     case VIDE:
@@ -69,6 +73,7 @@ public class GaufreModele {
                         break;
 
                     case POISON:
+                        game_has_change = true;
                         fin = true;
                         return;
 
@@ -81,6 +86,9 @@ public class GaufreModele {
             }
         }
         my_history.insert();
+        if (game_has_change){
+            metAJour();
+        }
     }
 
     private boolean isValidCell(int line, int column){
@@ -125,12 +133,13 @@ public class GaufreModele {
         return nbColonne;
     }
 
-    public void Affiche(){
-        for (int i=0; i<nbLigne; i++){
-            for (int j=0; j<nbColonne; j++){
+    public void Affiche() {
+        for (int i = 0; i < nbLigne; i++) {
+            for (int j = 0; j < nbColonne; j++) {
                 System.out.print(gaufre[i][j] + " ");
             }
             System.out.println();
         }
     }
+
 }
