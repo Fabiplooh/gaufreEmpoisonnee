@@ -46,24 +46,9 @@ public class Main implements Runnable {
         vue.setAdaptateurSouris(souris);
 
         frame.add(vue, BorderLayout.CENTER);
-
+        modele.addViewer(vue);
         // panneau du bas
-        JPanel panneau = new JPanel();
-        panneau.setLayout(new GridLayout(1, 5));
-        JButton annuler = new BoutonAnnule(modele);
-        AdaptateurAnnule adaptateurAnnule = new AdaptateurAnnule(modele);
-        annuler.addActionListener(adaptateurAnnule);
-        
-        JButton refait = new BoutonRefais(modele);
-        JButton sauve = new BoutonSauve(modele);
-        JButton charge = new BoutonCharge(modele);
-        JButton nouvelle = new BoutonNouvelle(modele);
-        JLabel label = new JLabel(modele.getCurrentPlayer());
-        panneau.add(annuler);
-        panneau.add(refait);
-        panneau.add(sauve);
-        panneau.add(charge);
-        panneau.add(label);
+        Panneau panneau = new Panneau(modele);
         frame.add(panneau, BorderLayout.SOUTH);
         
 
