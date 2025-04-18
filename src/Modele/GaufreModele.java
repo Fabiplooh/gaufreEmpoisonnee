@@ -43,27 +43,33 @@ public class GaufreModele {
     }
 
     public void Joue(int x, int y){
-        if (gaufre[x][y] == 2){
-            fin = true;
-            return;
-        }
-        int previousX = nbLigne -1;
-        int previousY = nbColonne -1;
-        boolean flag = true;
-        for (int i=x; i<nbLigne; i++){
-            for (int j=y; j<nbColonne; j++){
-                if (gaufre[i][j] == 1){
-                    gaufre[i][j] = 0;
-                }
-                else if (flag){
-                    previousX = i;
-                    previousY = j;
-                    flag = false;
+        if (x>0 && x <= nbLigne-1 && y>0 && y <= nbColonne-1){
+            if (gaufre[x][y] == 2){
+                fin = true;
+                return;
+            }
+            int previousX = nbLigne -1;
+            int previousY = nbColonne -1;
+            boolean flag = true;
+            for (int i=x; i<nbLigne; i++){
+                for (int j=y; j<nbColonne; j++){
+                    if (gaufre[i][j] == 1){
+                        gaufre[i][j] = 0;
+                    }
+                    else if (flag){
+                        previousX = i;
+                        previousY = j;
+                        flag = false;
+                    }
                 }
             }
+            Coup push = new Coup(x,y, previousX, previousY);
+            historyCoups.push(push);
         }
-        Coup push = new Coup(x,y, previousX, previousY);
-        historyCoups.push(push);
+    }
+
+    public int GetCase(int x, int y){
+        return gaufre[x][y];
     }
 
     private boolean PeutAnnuler(){
@@ -94,6 +100,16 @@ public class GaufreModele {
 
     public boolean isFin(){
         return fin;
+    }
+
+    public void Reset(){
+        for (int i=0; i<nbLigne; i++){
+            for (int j=0; j<nbColonne; j++){
+                gaufre[i][j] = 1;
+            }
+        }
+        gaufre[0][0] = 2;
+        historyCoups = new Stack<Coup>();
     }
 
     public int GetLine(){
