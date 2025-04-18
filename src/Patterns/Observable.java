@@ -2,9 +2,7 @@ package Patterns;
 
 import java.util.ArrayList;
 
-interface Observateur{
-    public void miseAJour();
-}
+
 
 
 public class Observable {
