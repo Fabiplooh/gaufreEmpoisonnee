@@ -39,6 +39,18 @@ public class GaufreModele {
         return isValidCell(line, column) && gaufre[line][column] == REMPLIE || gaufre[line][column] == POISON;
     }
 
+    public boolean estPoison(int line, int column){
+        return gaufre[line][column] == POISON;
+    }
+
+    public boolean estVide(int line, int column){
+        return gaufre[line][column] == VIDE;
+    }
+
+    public boolean estRemplie(int line, int column){
+        return gaufre[line][column] == REMPLIE;
+    }
+
     public void play(int line, int column){
         if ( ! canPlay(line, column)) {
             return;
