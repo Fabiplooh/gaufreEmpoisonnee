@@ -73,7 +73,7 @@ public class GaufreModele {
     public void Annule(){
         if (PeutAnnuler()){
             Coup pop = historyCoups.pop();
-            for (int i=pop.x; i<pop.previousX; i++){
+            for (int i=pop.x; i< pop.previousX; i++){
                 for (int j=pop.y; j< pop.previousY; j++){
                     gaufre[i][j] = 1;
                 }
