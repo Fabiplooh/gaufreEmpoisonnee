@@ -1,11 +1,12 @@
 package Vue;
 
 import Modele.GaufreModele;
+import Patterns.*;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class GaufreVue extends JComponent {
+public class GaufreVue extends JComponent implements Observateur {
     GaufreModele modele;
     public static final Color BROWN = new Color(196, 104, 25);
     public static final Color GREEN = new Color(62, 104, 8);
@@ -26,6 +27,10 @@ public class GaufreVue extends JComponent {
         }else {
             DessineGaufre(g);
         }
+    }
+
+    public void miseAJour() {
+        repaint();
     }
 
     private void DessineGaufre(Graphics g){

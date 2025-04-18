@@ -123,6 +123,7 @@ public class GaufreModele extends Observable {
         for (Cell to_remove : my_history.getPrev()) {
             gaufre[to_remove.line][to_remove.column] = REMPLIE;
         }
+        metAJour();
     }
 
 
@@ -133,6 +134,7 @@ public class GaufreModele extends Observable {
         for (Cell to_redo : my_history.getNext()) {
             gaufre[to_redo.line][to_redo.column] = VIDE;
         }
+        metAJour();
     }
 
     public boolean isFin() {
@@ -143,6 +145,8 @@ public class GaufreModele extends Observable {
         gaufre = new int[nbLigne][nbColonne];
         gaufre[DEFAULT_LINE_POISON][DEFAULT_COLUMN_POISON] = POISON;
         my_history = new Historique();
+        fin = false;
+        metAJour();
     }
 
     public int getLine() {
@@ -218,141 +222,5 @@ public class GaufreModele extends Observable {
         my_writter.close();
     }
 
-
-
-    int read_historique(Scanner my_scanner, Stack<ArrayList<Cell>> moment, boolean passe) throws Exception{
-        int current_line;
-        int current_col;
-        while (my_scanner.hasNextInt() ){
-            if (current_is_explore == -4 && passe ){
-                break;
-            }
-            if (current_is_explore == -2){
-                is_explore = false;
-            } else if (current_is_explore == -1){
-                is_explore = true;
-            } else{
-                System.err.println("Il manque un coup");
-                my_scanner.close();
-                throw new Exception();
-            }
-            if (! my_scanner.hasNextInt()){
-                System.err.println("Il manque un coup");
-                my_scanner.close();
-                throw new Exception();
-            }
-            current_line = my_scanner.nextInt();
-            if (! my_scanner.hasNextInt() || current_line < -6){
-                System.err.println("Il manque un coup");
-                my_scanner.close();
-                throw new Exception();
-            }
-            current_col= my_scanner.nextInt();
-            if (current_col < -6 ){
-                System.err.println("Il manque un coup");
-                my_scanner.close();
-                throw new Exception();
-            }
-            ArrayList<Point> temporary = new ArrayList<>();
-            if (is_explore) {
-                temporary.add(new Point(current_line, current_col));
-                while (true){
-                    current_line = my_scanner.nextInt();
-                    if (current_line == -7){
-                        break;
-                    }
-                    current_col= my_scanner.nextInt();
-                    temporary.add(new Point(current_line, current_col));
-                }
-                moment.add(new Coup(is_explore, temporary));
-
-            } else{
-                temporary.add(new Point(current_line, current_col));
-                moment.add(new Coup(is_explore, temporary));
-
-            }
-        }
-        return current_is_explore;
-    }
-
-    void get_historique(Scanner my_scanner) throws Exception{
-        if ( ! my_scanner.hasNextInt() ||  my_scanner.nextInt() != -3 ) {
-            System.err.println("Il manque le passé");
-            my_scanner.close();
-            throw new Exception();
-        }
-        int current_is_explore = -8;
-        try{
-            current_is_explore = read_historique(my_scanner, historique.le_passe, true);
-        } catch (Exception e){
-            throw e;
-        }
-        if ( current_is_explore != -4){
-            System.err.println("Il manque le futur");
-            my_scanner.close();
-            throw new Exception();
-        }
-        try{
-            current_is_explore = read_historique(my_scanner, historique.le_futur, false);
-        } catch (Exception e){
-            throw e;
-        }
-
-    }
-
-    void get_dimension(Scanner my_scanner) throws Exception{
-        for (int i = 0; i < 2; i++){
-            if (my_scanner.hasNextInt() ) {
-                if (i == 0){
-                    this.nbLigne = my_scanner.nextInt();
-                } else{
-                    this.nbColonne = my_scanner.nextInt();
-                }
-            } else{
-                if (i == 0){
-                    System.err.println("Il faut le numéro de ligne");
-                } else{
-                    System.err.println("Il faut le numéro de colonnes");
-                }
-                my_scanner.close();
-                throw new Exception();
-            }
-        }
-        this.gaufre= new int[this.nbLigne][this.nbColonne];
-    }
-
-    void get_map(Scanner my_scanner) throws Exception{
-        for (int line = 0; line < this.nbLigne; line++){
-            for (int col= 0; col < this.nbColonne; col++){
-                if (my_scanner.hasNextInt() ) {
-                    this.gaufre[line][col] = my_scanner.nextInt();
-                } else{
-                    System.err.println("Il manque des cases");
-                    my_scanner.close();
-                    throw new Exception();
-                }
-            }
-        }
-    }
-
-    GaufreModele(String fichier) throws Exception {
-        FileInputStream my_file;
-        Scanner my_scanner;
-        try{
-            my_file = new FileInputStream(fichier);
-            my_scanner = new Scanner(my_file);
-        } catch( Exception e){
-            throw e;
-        }
-        my_scanner.useDelimiter("[,\\s\\n]+");
-        try{
-            get_dimension(my_scanner);
-            get_map(my_scanner);
-            get_historique(my_scanner);
-        } catch (Exception e){
-            throw e;
-        }
-        my_scanner.close();
-    }
 
 }
