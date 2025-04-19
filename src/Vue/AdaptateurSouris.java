@@ -13,13 +13,23 @@ public class AdaptateurSouris extends MouseAdapter {
         this.vue = vue;
     }
 
+    private int getLine(MouseEvent e){
+        return e.getY() / ((vue.getHeight() / modele.getLine()));
+    }
+
+    private int getColumn(MouseEvent e){
+        return e.getX() / ((vue.getWidth() / modele.getColonne()));
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
-        int colonne = e.getX() / ((vue.getWidth() / modele.getColonne()));
-        int ligne = e.getY() / ((vue.getHeight() / modele.getLine()));
         //System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
-        //System.out.println("Cell clicked: (" + ligne + "," + colonne + ")");
-        modele.play(ligne, colonne);
-        vue.repaint();
+        //System.out.println("Cell clicked: (" + getLine(e) + "," + getColumn(e) + ")");
+        modele.play(getLine(e), getColumn(e));
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e){
+        modele.setPosition(getLine(e), getColumn(e));
     }
 }

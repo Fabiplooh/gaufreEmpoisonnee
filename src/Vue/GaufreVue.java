@@ -5,12 +5,16 @@ import Patterns.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.lang.module.Configuration;
+import Global.OurConfiguration;
 
 public class GaufreVue extends JComponent implements Observateur {
     GaufreModele modele;
     public static final Color BROWN = new Color(196, 104, 25);
     public static final Color GREEN = new Color(62, 104, 8);
     public static final Color GRAY = new Color(119, 119, 119);
+    public static final Color YELLOW= new Color(140, 45, 45);
 
     public GaufreVue(GaufreModele modele) {
         this.modele = modele;
@@ -18,6 +22,7 @@ public class GaufreVue extends JComponent implements Observateur {
 
     public void setAdaptateurSouris(AdaptateurSouris souris) {
         this.addMouseListener(souris);
+        this.addMouseMotionListener(souris);
     }
 
     public void paintComponent(Graphics g) {
@@ -33,7 +38,7 @@ public class GaufreVue extends JComponent implements Observateur {
         repaint();
     }
 
-    private void DessineGaufre(Graphics g){
+    private void DessineGaufre(Graphics g) {
         int largeur = getWidth()/ modele.getColonne();
         int hauteur = getHeight()/ modele.getLine();
 
@@ -51,7 +56,11 @@ public class GaufreVue extends JComponent implements Observateur {
                 } else { 
                     remplisCase(g, x, y, largeur, hauteur, GRAY );
                 }
-                
+                if (OurConfiguration.instance().getProperty("preview").equals("true")) {
+                    if (modele.canBeEat(i, j)) {
+                        remplisCase(g, x, y, largeur, hauteur, YELLOW);
+                    }
+                }
                 g.setColor(Color.black);
                 g.drawRect(x,y,largeur,hauteur);
             }

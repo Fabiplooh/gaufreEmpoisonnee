@@ -18,6 +18,8 @@ public class GaufreModele extends Observable {
     public int[][] gaufre; //0 vide; 1 remplis; 2 empoisonnée
     private int nbLigne;
     private int nbColonne;
+    int curColumn;
+    int curLine;
     private boolean fin = false;
     private Historique my_history;
     private final int POISON = 2;
@@ -38,6 +40,8 @@ public class GaufreModele extends Observable {
         } else {
             initGaufreWithFile(OurConfiguration.instance().getProperty("input_file"));
         }
+        curColumn = getColonne() + 1;
+        curLine = getLine() + 1;
     }
 
     public void initGaufreWithFile(String fichier) throws Exception {
@@ -83,6 +87,14 @@ public class GaufreModele extends Observable {
 
     public boolean estRemplie(int line, int column) {
         return gaufre[line][column] == REMPLIE;
+    }
+
+    public void setPosition(int line, int column){
+        if ( isValidCell(line,column) ){
+            curLine = line;
+            curColumn = column;
+            metAJour();
+        }
     }
 
     public void play(int line, int column) {
@@ -263,12 +275,12 @@ public class GaufreModele extends Observable {
         }
     }
 
-    public boolean canBeEat(int linePlay, int columnPlay, int lineCellVisited, int columnCellVisited){
-        if ( ! (isValidCell(linePlay, columnPlay) && isValidCell(lineCellVisited, columnCellVisited)) ){
+    public boolean canBeEat(int lineCellVisited, int columnCellVisited){
+        if ( ! isValidCell(lineCellVisited, columnCellVisited)){
            return false;
         }
         int valueCell = getCase(lineCellVisited, columnCellVisited);
-        return lineCellVisited >= linePlay && columnCellVisited >= columnPlay &&
+        return lineCellVisited >= curLine && columnCellVisited >= curColumn &&
                 ( valueCell == REMPLIE || valueCell == POISON ) ;
     }
 

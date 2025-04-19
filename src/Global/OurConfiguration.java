@@ -13,16 +13,23 @@ public class OurConfiguration {
         properties.load(my_file);
     }
 
-    public static OurConfiguration instance() throws IOException {
+    public static OurConfiguration instance() {
         if (is_instance == null){
-            is_instance = new OurConfiguration("default.cfg");
+            try{
+                is_instance = new OurConfiguration("default.cfg");
+            } catch (IOException e) {
+                System.out.println("pas de fichier trouvé");
+            }
         }
         return is_instance;
     }
 
-    public String getProperty (String propertyName) throws IOException {
-        return properties.getProperty(propertyName);
+    public String getProperty (String propertyName) {
+        String result = properties.getProperty(propertyName);
+        if ( result == null){
+            result = "";
+        }
+        return result;
     }
-
 
 }
