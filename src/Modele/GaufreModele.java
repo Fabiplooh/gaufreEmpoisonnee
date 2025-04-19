@@ -214,7 +214,7 @@ public class GaufreModele extends Observable {
                 for (Cell cur_coup : cur_list) {
                     my_writter.print( "," + cur_coup.line + "," + cur_coup.column);
                 }
-                my_writter.println("-7");
+                my_writter.println(",-7");
                 current++;
             } catch (Exception e) {
                 Collections.reverse(moment);
@@ -287,6 +287,7 @@ public class GaufreModele extends Observable {
     }
 
     void get_historique(Scanner my_scanner) throws Exception{
+        my_history = new Historique();
         if ( ! my_scanner.hasNextInt() ||  my_scanner.nextInt() != -3 ) {
             System.err.println("Il manque le passé");
             my_scanner.close();
