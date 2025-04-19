@@ -90,11 +90,9 @@ public class GaufreModele extends Observable {
     }
 
     public void setPosition(int line, int column){
-        if ( isValidCell(line,column) ){
-            curLine = line;
-            curColumn = column;
-            metAJour();
-        }
+        curLine = line;
+        curColumn = column;
+        metAJour();
     }
 
     public void play(int line, int column) {

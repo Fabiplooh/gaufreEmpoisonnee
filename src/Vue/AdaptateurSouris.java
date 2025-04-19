@@ -32,4 +32,9 @@ public class AdaptateurSouris extends MouseAdapter {
     public void mouseMoved(MouseEvent e){
         modele.setPosition(getLine(e), getColumn(e));
     }
+
+    @Override
+    public void mouseExited(MouseEvent e){
+        modele.setPosition(modele.getLine() + 1, modele.getColonne() + 1 );
+    }
 }
