@@ -59,6 +59,7 @@ public class GaufreModele extends Observable {
             throw e;
         }
         my_scanner.close();
+        metAJour();
     }
 
     private void initGaufreWithDim(int x, int y) {

@@ -3,6 +3,7 @@ package Vue;
 import javax.swing.*;
 import java.awt.*;
 
+import Global.OurConfiguration;
 import Modele.GaufreModele;
 
 public class Panneau extends JPanel{
@@ -22,11 +23,23 @@ public class Panneau extends JPanel{
         modele.addViewer(refait);
 
         BoutonSauve sauve = new BoutonSauve(modele);
-        //sauve.addActionListener(e->modele.save());
-        //modele.addViewer(sauve);
+        sauve.addActionListener(e-> {
+            try {
+                modele.save();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        modele.addViewer(sauve);
 
         BoutonCharge charge = new BoutonCharge(modele);
-        //charge.addActionListener(e->modele.load);
+        charge.addActionListener(e-> {
+            try {
+                modele.initGaufreWithFile(OurConfiguration.instance().getProperty("input_file"));
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         BoutonNouvelle nouvelle = new BoutonNouvelle(modele);
         nouvelle.addActionListener(e->modele.reset());
