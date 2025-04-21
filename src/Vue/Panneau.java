@@ -24,27 +24,43 @@ public class Panneau extends JPanel{
         refait.addActionListener(e->modele.redo());
         modele.addViewer(refait);
 
+        JFrame saveFrame = new JFrame("Sauvegarde de fichier");
+        saveFrame.setSize(400, 200);
+        saveFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        saveFrame.setLayout(null);
+
         BoutonSauve sauve = new BoutonSauve(modele);
-        sauve.addActionListener(e-> {
-            try {
-                modele.save();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
+        sauve.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Donner un nom au fichier");
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+                int userSelection = fileChooser.showSaveDialog(saveFrame);
+
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                try {
+                    modele.save(fileToSave.getAbsolutePath());
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }   
+                }   
+            }   
         });
         modele.addViewer(sauve);
 
-        JFrame frame = new JFrame("Sélecteur de fichier");
-        frame.setSize(400, 200);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null);
+        JFrame explorateurFrame = new JFrame("Sélecteur de fichier");
+        explorateurFrame.setSize(400, 200);
+        explorateurFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        explorateurFrame.setLayout(null);
 
         BoutonCharge charge = new BoutonCharge(modele);
         charge.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // Uniquement des fichiers
-                int result = fileChooser.showOpenDialog(frame);
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                int result = fileChooser.showOpenDialog(explorateurFrame);
 
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
