@@ -5,8 +5,6 @@ import Patterns.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.lang.module.Configuration;
 import Global.OurConfiguration;
 
 public class GaufreVue extends JComponent implements Observateur {
@@ -79,7 +77,6 @@ public class GaufreVue extends JComponent implements Observateur {
         // Calcule dimensions du texte pour le centrer
         FontMetrics fontMetrics = g.getFontMetrics();
         int messageLargeur = fontMetrics.stringWidth(joueur_victoire);
-        int messageHauteur = fontMetrics.getHeight();
 
         // Positionner le message au centre de la fenêtre
         int x = (getWidth() / 2) - messageLargeur ;

@@ -2,6 +2,8 @@ package Vue;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
 
 import Global.OurConfiguration;
 import Modele.GaufreModele;
@@ -32,14 +34,29 @@ public class Panneau extends JPanel{
         });
         modele.addViewer(sauve);
 
+        JFrame frame = new JFrame("Sélecteur de fichier");
+        frame.setSize(400, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null);
+
         BoutonCharge charge = new BoutonCharge(modele);
-        charge.addActionListener(e-> {
-            try {
-                modele.initGaufreWithFile(OurConfiguration.instance().getProperty("input_file"));
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+        charge.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // Uniquement des fichiers
+                int result = fileChooser.showOpenDialog(frame);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    try {
+                        modele.initGaufreWithFile(selectedFile.getAbsolutePath());
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
             }
         });
+        modele.addViewer(charge);
 
         BoutonNouvelle nouvelle = new BoutonNouvelle(modele);
         nouvelle.addActionListener(e->modele.reset());
