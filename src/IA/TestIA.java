@@ -15,13 +15,13 @@ public class TestIA {
         final int hauteur = 6;
         final int largeur = 6;
 
-        for(int i=0 ; i<1; i++){
+        for(int i=0 ; i<500; i++){
 
             ia = new ArbreEtOu(hauteur, largeur);
             iar = new IARandom(hauteur, largeur);
             c = new Coup(-1, -1);
 
-            while(c.getLigne() != 0 && c.getColonne() != 0){
+            while(!(c.getLigne() == 0 && c.getColonne() == 0)){
                 c = ia.coupAJouer();
                 System.out.println("IA: "+c);
                 assertFalse(c.getLigne() == 0 && c.getColonne() == 0);

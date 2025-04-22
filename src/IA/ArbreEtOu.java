@@ -15,10 +15,12 @@ enum TypeNoeud {
 class Noeud{
     TypeNoeud type;
     ArrayList<Coup> coups;
+    Set<Coup> bornes;
 
     public Noeud(TypeNoeud type, ArrayList<Coup> coups){
         this.type = type;
         this.coups = new ArrayList<>(coups);
+        bornes = calcul_bornes();
     }
 
     public ArrayList<Coup> getCoups(){
@@ -31,16 +33,16 @@ class Noeud{
 
     @Override
     public int hashCode() {
-        return bornes().hashCode();
+        return bornes.hashCode();
     }
 
-    private Set<Coup> bornes(){
+    private Set<Coup> calcul_bornes(){
         Set<Coup> b = new HashSet<>();
         boolean est_borne;
         for(Coup c : coups){
             est_borne = true;
             for(Coup ci : coups){
-                if(ci.getLigne() < c.getLigne() && ci.getColonne() < c.getColonne()){
+                if(!c.equals(ci) && ci.getLigne() <= c.getLigne() && ci.getColonne() <= c.getColonne()){
                     est_borne = false;
                 }
             }
@@ -58,10 +60,8 @@ class Noeud{
         if(type != n.type){
             return false;
         }
-        Set<Coup> b = bornes();
-        Set<Coup> bn = n.bornes();
 
-        return b.equals(bn);
+        return bornes.equals(n.bornes);
     }
 
 }
