@@ -5,6 +5,9 @@ import Patterns.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import Global.OurConfiguration;
 
 public class GaufreVue extends JComponent implements Observateur {
