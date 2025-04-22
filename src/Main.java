@@ -1,3 +1,4 @@
+import Vue.AdaptateurSouris;
 import Modele.GaufreModele;
 import Vue.*;
 import Global.OurConfiguration;

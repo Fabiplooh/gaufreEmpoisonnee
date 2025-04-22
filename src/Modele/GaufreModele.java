@@ -23,11 +23,10 @@ public class GaufreModele extends Observable {
     private final int VIDE = 1;
     private final int INVALID = -1;
     private int current_player = 0;
+
     /*
     Par défaut notre gaufre est remplis et fait une taille de 4 ligne et 6 colonne
      */
-
-
     public GaufreModele() throws Exception {
         if (OurConfiguration.instance().getProperty("new_game").compareTo("true") == 0){
             int lines =  Integer.parseInt(OurConfiguration.instance().getProperty("line"));
@@ -198,6 +197,13 @@ public class GaufreModele extends Observable {
         fin = false;
         current_player = 0;
         metAJour();
+    }
+
+    public boolean isSelectedCase(int ligne, int colonne){
+        if(ligne == curLine && colonne == curColumn){
+            return true;
+        }
+        return false;
     }
 
     public int getLine() {
