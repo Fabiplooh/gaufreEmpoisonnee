@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-public class GaufreModele extends Observable {
+public class GaufreModele {
     private static final int DEFAULT_LINE_POISON = 0;
     private static final int DEFAULT_COLUMN_POISON = 0;
     public int[][] gaufre; //0 vide; 1 remplis; 2 empoisonnée
@@ -58,7 +58,6 @@ public class GaufreModele extends Observable {
             throw e;
         }
         my_scanner.close();
-        metAJour();
     }
 
     private void initGaufreWithDim(int x, int y) {
@@ -88,15 +87,14 @@ public class GaufreModele extends Observable {
     public void setPosition(int line, int column){
         curLine = line;
         curColumn = column;
-        metAJour();
     }
 
-    public void play(int line, int column) {
+    public boolean play(int line, int column) {
         if (!canPlay(line, column)) {
-            return;
+            return false;
         }
         if (isFin()){
-            return;
+            return false;
         }
         boolean game_has_change = false;
         for (int l = line; l < nbLigne; l++) {
@@ -130,8 +128,8 @@ public class GaufreModele extends Observable {
         if (game_has_change) {
             my_history.insert();
             changePlayer();
-            metAJour();
         }
+        return game_has_change;
     }
 
     private void changePlayer(){
@@ -142,7 +140,7 @@ public class GaufreModele extends Observable {
         return line >= 0 && line < nbLigne && column >= 0 && column < nbColonne;
     }
 
-    public int getCase(int line, int column) {
+    private int getCase(int line, int column) {
         if (isValidCell(line, column)) {
             return gaufre[line][column];
         }
@@ -157,33 +155,35 @@ public class GaufreModele extends Observable {
         return my_history.canRedo();
     }
 
-    public void undo() {
-        if (!canUndo()) {
-            return;
-        }
-        fin = false;
-        for (Cell to_remove : my_history.getPrev()) {
-            gaufre[to_remove.line][to_remove.column] = REMPLIE;
-            if (to_remove.line == DEFAULT_LINE_POISON && to_remove.column == DEFAULT_COLUMN_POISON){
-                gaufre[to_remove.line][to_remove.column] = POISON;
+    public void undo(int nbTime) {
+        for (int whichTime = 0; whichTime < nbTime; whichTime++) {
+            if (!canUndo()) {
+                return;
             }
+            fin = false;
+            for (Cell to_remove : my_history.getPrev()) {
+                gaufre[to_remove.line][to_remove.column] = REMPLIE;
+                if (to_remove.line == DEFAULT_LINE_POISON && to_remove.column == DEFAULT_COLUMN_POISON){
+                    gaufre[to_remove.line][to_remove.column] = POISON;
+                }
+            }
+            changePlayer();
         }
-        changePlayer();
-        metAJour();
     }
 
-    public void redo() {
-        if (!canRedo()) {
-            return;
-        }
-        for (Cell to_redo : my_history.getNext()) {
-            gaufre[to_redo.line][to_redo.column] = VIDE;
-            if (to_redo.line == DEFAULT_LINE_POISON && to_redo.column == DEFAULT_COLUMN_POISON){
-                fin=true;
+    public void redo(int nbTime) {
+        for (int whichTime = 0; whichTime < nbTime; whichTime++) {
+            if (!canRedo()) {
+                return;
             }
+            for (Cell to_redo : my_history.getNext()) {
+                gaufre[to_redo.line][to_redo.column] = VIDE;
+                if (to_redo.line == DEFAULT_LINE_POISON && to_redo.column == DEFAULT_COLUMN_POISON) {
+                    fin = true;
+                }
+            }
+            changePlayer();
         }
-        changePlayer();
-        metAJour();
     }
 
     public boolean isFin() {
@@ -196,7 +196,6 @@ public class GaufreModele extends Observable {
         my_history = new Historique();
         fin = false;
         current_player = 0;
-        metAJour();
     }
 
     public boolean isSelectedCase(int ligne, int colonne){
@@ -221,6 +220,14 @@ public class GaufreModele extends Observable {
             }
             System.out.println();
         }
+    }
+
+    public Cell lastMove(){
+        return my_history.previous.peek().getFirst();
+    }
+
+    public int getCurrentPlayerInt() {
+        return current_player;
     }
 
     public String getCurrentPlayer() {
@@ -255,7 +262,9 @@ public class GaufreModele extends Observable {
         my_writter.println("-4");
         my_history.save_historique(my_writter, false);
         my_writter.close();
+        my_file.close();
     }
+
 
     void get_dimension(Scanner my_scanner) throws Exception{
         for (int i = 0; i < 2; i++){

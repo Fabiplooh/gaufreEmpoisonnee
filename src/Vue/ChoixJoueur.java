@@ -1,5 +1,7 @@
 package Vue;
 
+import Controleur.Controleur_IA;
+
 import javax.swing.*;
 
 import java.awt.Dialog;
@@ -9,7 +11,7 @@ import java.awt.event.*;
 public class ChoixJoueur extends JDialog {
     String j1, j2;
 
-    public ChoixJoueur(JDialog menu) {
+    public ChoixJoueur(Menu menu) {
         super(menu);
         String[] listeJoueurs = {"Humain", "IA facile", "IA moyenne", "IA difficile", "IA random"};
         setTitle("Choix des joueurs");
@@ -35,6 +37,47 @@ public class ChoixJoueur extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 j1 = box1.getSelectedItem().toString();
                 j2 = box2.getSelectedItem().toString();
+                int difficultyJ1 = -1;
+                switch (j1){
+                    case "Humain":
+                        break;
+                    case "IA facile":
+                        difficultyJ1=0;
+                        break;
+                    case "IA moyenne":
+                        difficultyJ1=1;
+                        break;
+                    case "IA difficile":
+                        difficultyJ1=2;
+                        break;
+                    case "IA random":
+                        difficultyJ1=3;
+                        break;
+                }
+                if ( difficultyJ1> -1) {
+                    menu.modele.addViewer(new Controleur_IA(menu.modele, 0, difficultyJ1));
+                }
+                int difficultyJ2 = -1;
+                switch (j2) {
+                    case "Humain":
+                        break;
+                    case "IA facile":
+                        difficultyJ2=0;
+                        break;
+                    case "IA moyenne":
+                        difficultyJ2=1;
+                        break;
+                    case "IA difficile":
+                        difficultyJ2=2;
+                        break;
+                    case "IA random":
+                        difficultyJ2=3;
+                        break;
+                }
+                if ( difficultyJ2> -1) {
+                    menu.modele.addViewer(new Controleur_IA(menu.modele, 1, difficultyJ2));
+                }
+                menu.modele.reset();
                 dispose();
                 menu.dispose();
             }

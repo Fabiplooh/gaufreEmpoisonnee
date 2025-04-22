@@ -3,8 +3,6 @@ package IA;
 import java.util.ArrayList;
 import java.util.Random;
 
-import Modele.GaufreModele;
-
 public class IARandom implements IA {
     Random rand;
     int hauteur,largeur;

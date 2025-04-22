@@ -1,6 +1,6 @@
 package Vue;
 
-import Modele.GaufreModele;
+import Modele.Jeu;
 import Patterns.*;
 
 import javax.swing.*;
@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import Global.OurConfiguration;
 
 public class GaufreVue extends JComponent implements Observateur {
-    GaufreModele modele;
+    Jeu modele;
     public static final Color BROWN = new Color(196, 104, 25);
     public static final Color GREEN = new Color(62, 104, 8);
     public static final Color GRAY = new Color(119, 119, 119);
@@ -21,7 +21,7 @@ public class GaufreVue extends JComponent implements Observateur {
     private int curColPix;
     private float decalagePointille =0.0f;
 
-    public GaufreVue(GaufreModele modele) {
+    public GaufreVue(Jeu modele) {
         this.modele = modele;
         timer = new Timer(50, new ActionListener() {
             public void actionPerformed(ActionEvent e) {

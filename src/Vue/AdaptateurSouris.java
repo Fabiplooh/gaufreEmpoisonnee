@@ -2,13 +2,13 @@ package Vue;
 
 import java.awt.event.*;
 
-import Modele.GaufreModele;
+import Modele.Jeu;
 
 public class AdaptateurSouris extends MouseAdapter {
     GaufreVue vue;
-    GaufreModele modele;
+    Jeu modele;
 
-    public AdaptateurSouris(GaufreVue vue, GaufreModele modele) {
+    public AdaptateurSouris(GaufreVue vue, Jeu modele) {
         this.modele = modele;
         this.vue = vue;
     }

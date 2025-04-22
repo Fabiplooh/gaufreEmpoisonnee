@@ -2,13 +2,15 @@ package Vue;
 
 import javax.swing.*;
 import Modele.GaufreModele;
+import Modele.Jeu;
+
 import java.awt.event.*;
 import java.io.File;
 
 public class Menu extends JDialog {
-    GaufreModele modele;
+    Jeu modele;
 
-    public Menu(GaufreModele m) {
+    public Menu(Jeu m) {
         modele = m;
 
         this.setModal(true);
@@ -69,7 +71,7 @@ public class Menu extends JDialog {
                 }
             }
         });
-        JDialog menud = this;
+        Menu menud = this;
         BoutonNouvelle nouvelle = new BoutonNouvelle(modele);
         nouvelle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

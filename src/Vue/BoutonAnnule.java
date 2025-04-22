@@ -1,17 +1,17 @@
 package Vue;
 
-import Modele.GaufreModele;
+import Modele.Jeu;
 import Patterns.Observateur;
 import javax.swing.*;
 
 public class BoutonAnnule extends JButton implements Observateur {
-    GaufreModele modele;
+    Jeu modele;
 
     public void miseAJour(){
         setEnabled(modele.canUndo());
     }
 
-    public BoutonAnnule(GaufreModele m) {
+    public BoutonAnnule(Jeu m) {
         modele = m;
         setText("<-");
         setEnabled(modele.canUndo());

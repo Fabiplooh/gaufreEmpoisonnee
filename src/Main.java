@@ -1,6 +1,6 @@
 import Vue.*;
 import Vue.Menu;
-import Modele.GaufreModele;
+import Modele.Jeu;
 import Global.OurConfiguration;
 import javax.swing.*;
 import java.awt.*;
@@ -30,11 +30,11 @@ public class Main implements Runnable {
     }
 
     public void start(JFrame frame) throws Exception {
-        GaufreModele modele = new GaufreModele();
+        Jeu modele = new Jeu();
 
         GaufreVue vue = new GaufreVue(modele);
         AdaptateurSouris souris = new AdaptateurSouris(vue, modele);
-        
+
         vue.setAdaptateurSouris(souris);
 
         frame.add(vue, BorderLayout.CENTER);

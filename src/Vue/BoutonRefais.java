@@ -1,17 +1,17 @@
 package Vue;
 
-import Modele.GaufreModele;
+import Modele.Jeu;
 import Patterns.Observateur;
 import javax.swing.*;
 
 public class BoutonRefais extends JButton implements Observateur {
-    GaufreModele modele;
+    Jeu modele;
 
     public void miseAJour(){
         setEnabled(modele.canRedo());
     }
 
-    public BoutonRefais(GaufreModele m) {
+    public BoutonRefais(Jeu m) {
         modele = m;
         setText("->");
         setEnabled(modele.canRedo());

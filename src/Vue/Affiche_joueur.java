@@ -2,13 +2,13 @@ package Vue;
 
 import javax.swing.JLabel;
 
-import Modele.GaufreModele;
+import Modele.Jeu;
 import Patterns.*;
 
 public class Affiche_joueur extends JLabel implements Observateur {
-    GaufreModele modele;
+    Jeu modele;
 
-    public Affiche_joueur( GaufreModele m){
+    public Affiche_joueur( Jeu m){
         modele = m;
         miseAJour();
     }

@@ -61,7 +61,6 @@ public class Historique {
         if (moment.isEmpty()) {
             return;
         }
-        Collections.reverse(moment);
         int current = 0;
         while (true){
             try {
@@ -72,7 +71,6 @@ public class Historique {
                 my_writter.println(",-7");
                 current++;
             } catch (Exception e) {
-                Collections.reverse(moment);
                 return;
             }
         }

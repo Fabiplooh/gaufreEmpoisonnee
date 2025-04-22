@@ -5,13 +5,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 
-import Global.OurConfiguration;
-import Modele.GaufreModele;
+import Modele.Jeu;
 
 public class Panneau extends JPanel{
-    GaufreModele modele;
+    Jeu modele;
 
-    public Panneau(GaufreModele modelea){
+    public Panneau(Jeu modelea){
         modele = modelea;
 
         this.setLayout(new GridLayout(1, 3));

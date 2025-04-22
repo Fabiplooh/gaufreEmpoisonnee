@@ -1,13 +1,13 @@
 package Vue;
 
-import Modele.GaufreModele;
+import Modele.Jeu;
 import javax.swing.*;
 
 public class BoutonCharge extends JButton {
-    GaufreModele modele;
+    Jeu modele;
 
 
-    public BoutonCharge(GaufreModele m) {
+    public BoutonCharge(Jeu m) {
         modele = m;
         setText("Load");
         setEnabled(true);

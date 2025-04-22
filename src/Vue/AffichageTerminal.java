@@ -1,8 +1,9 @@
 package Vue;
 
-import Modele.GaufreModele;
+import Controleur.Controleur_IA;
+import IA.IA;
+import Modele.Jeu;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class AffichageTerminal {
@@ -22,15 +23,16 @@ public class AffichageTerminal {
 
     public AffichageTerminal() throws Exception {
         Scanner s = new Scanner(System.in);
-        GaufreModele modele = new GaufreModele();
+        Jeu modele = new Jeu();
         displayCommands();
+        modele.Affiche();
         do {
-            System.out.print(">>> ");
+            System.out.print("\n" + modele.getCurrentPlayer() + " >>> ");
         } while (s.hasNextLine() && execute(s.nextLine(), modele));
     }
 
 
-    public boolean execute(String s, GaufreModele t){
+    public boolean execute(String s, Jeu t){
         String [] parts = s.split("\\s+");
         int [] args = new int[parts.length - 1];
         try {
@@ -50,11 +52,15 @@ public class AffichageTerminal {
                 case "refais":
                     t.redo();
                     break;
+                case "reset":
+                    t.reset();
+                    break;
                 case "print":
                     t.Affiche();
                     break;
-                case "reset":
-                    t.reset();
+                case "IA":
+                    t.addViewer(new Controleur_IA(t, 1, 1));
+                    t.reset(t.IA);
                     break;
                 case "q":
                     return false;
