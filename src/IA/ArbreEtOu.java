@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Random;
 
 enum TypeNoeud {
     ET,
@@ -66,17 +65,16 @@ class Noeud{
 
 }
 
-public class ArbreEtOu implements IA {
-    HashMap<Noeud, Boolean> mem; // memoisation
-    ArrayList<Coup> configAct;
-    int hauteur, largeur;
-    Random rand;
+public abstract class ArbreEtOu implements IA {
+    private HashMap<Noeud, Boolean> mem; // memoisation
+    private ArrayList<Coup> configAct;
+    private int hauteur, largeur;
 
+    protected abstract Coup choisir_coup(ArrayList<Coup> coupsGagnants,ArrayList<Coup> coupsPerdants);
 
-    public ArbreEtOu(int x, int y){
-        hauteur = x;
-        largeur = y;
-        rand = new Random();
+    public ArbreEtOu(int hauteur, int largeur){
+        this.hauteur = hauteur;
+        this.largeur = largeur;
         mem = new HashMap<>();
         configAct = new ArrayList<>();
 
@@ -99,29 +97,14 @@ public class ArbreEtOu implements IA {
             }
         }
 
-        Coup res;
-        int indice;
+        Coup coup = choisir_coup(coupsGagnants, coupsPerdants);
 
-        if(!coupsGagnants.isEmpty()){
-            indice = rand.nextInt(coupsGagnants.size());
-            res = coupsGagnants.get(indice);
-        } else {
-            indice = rand.nextInt(coupsPerdants.size());
-            res = coupsPerdants.get(indice);
-        }
-
-        System.out.println("COUPS GAGNANTS");
-        System.out.println(coupsGagnants);
-        System.out.println("Coups perdants: ");
-        System.out.println(coupsPerdants);
-
-
-        configAct.add(res);
-        return res;
+        configAct.add(coup);
+        return coup;
     }
 
 
-    ArrayList<Coup> joue(Coup c, ArrayList<Coup> config){
+    private ArrayList<Coup> joue(Coup c, ArrayList<Coup> config){
         ArrayList<Coup> res;
         if(config != null){
             res = new ArrayList<>(config);
@@ -139,7 +122,7 @@ public class ArbreEtOu implements IA {
     }
 
 
-    ArrayList<Coup> coupsJouables(ArrayList<Coup> coups){
+    private ArrayList<Coup> coupsJouables(ArrayList<Coup> coups){
         ArrayList<Coup> cj = new ArrayList<>();
         boolean jouable;
         for(int i=0; i < hauteur; i++){
@@ -162,7 +145,7 @@ public class ArbreEtOu implements IA {
 
 
     // Résultat: vrai si la configuration est gagnante, faux sinon (elle est perdante)
-    boolean calculJoueurA(ArrayList<Coup> config){
+    private boolean calculJoueurA(ArrayList<Coup> config){
         //Données: Configuration de jeu, c’est au joueur A de jouer
         if(estGaufreVide(config)){
             return true;
@@ -187,7 +170,7 @@ public class ArbreEtOu implements IA {
 
 
     // Résultat: vrai si la configuration est gagnante pour A, faux sinon (elle est perdante)
-    boolean calculJoueurB(ArrayList<Coup> config){
+    private boolean calculJoueurB(ArrayList<Coup> config){
         //Données: Configuration de jeu, c’est au joueur B de jouer
         if (estGaufreVide(config)){
             return false;
