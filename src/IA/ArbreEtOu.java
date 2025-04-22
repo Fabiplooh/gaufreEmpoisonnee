@@ -1,45 +1,16 @@
 package IA;
-import java.lang.ProcessBuilder.Redirect.Type;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
-import Modele.GaufreModele;
+import java.util.Random;
 
 enum TypeNoeud {
     ET,
     OU
 }
 
-class Coup {
-    int i;
-    int j;
-
-    public Coup(int i, int j){
-        this.i = i;
-        this.j = j;
-    }
-
-    public int getLigne(){
-        return i;
-    }
-
-    public int getColonne(){
-        return j;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        Coup c = (Coup) obj;
-        return this.getLigne() == c.getLigne() && this.getColonne() == c.getColonne();
-    }
-
-    @Override
-    public int hashCode() {
-        return String.format("%d,%d", i, j).hashCode();
-    }
-}
 
 class Noeud{
     TypeNoeud type;
@@ -60,11 +31,7 @@ class Noeud{
 
     @Override
     public int hashCode() {
-        int h = 0;
-        for(Coup c : coups){
-            h += c.hashCode();
-        }
-        return h;
+        return bornes().hashCode();
     }
 
     private Set<Coup> bornes(){
@@ -73,7 +40,7 @@ class Noeud{
         for(Coup c : coups){
             est_borne = true;
             for(Coup ci : coups){
-                if(ci.getLigne() < c.getLigne() || ci.getColonne() < c.getColonne()){
+                if(ci.getLigne() < c.getLigne() && ci.getColonne() < c.getColonne()){
                     est_borne = false;
                 }
             }
@@ -99,28 +66,69 @@ class Noeud{
 
 }
 
-class ArbreEtOu implements IA {
+public class ArbreEtOu implements IA {
     HashMap<Noeud, Boolean> mem; // memoisation
-    ArrayList<Coup> etatAct;
+    ArrayList<Coup> configAct;
+    int hauteur, largeur;
+    Random rand;
 
-    Noeud racine;
-    GaufreModele modele;
 
-    @Override
-    public void coupAdversaire(int i, int j){
-        2.0....;
+    public ArbreEtOu(int x, int y){
+        hauteur = x;
+        largeur = y;
+        rand = new Random();
+        mem = new HashMap<>();
+        configAct = new ArrayList<>();
+
     }
 
-    public Coup coupquejejoue
+    public void coupAdversaire(Coup c){
+        configAct.add(c);
+    }
 
-    public ArbreEtOu(GaufreModele modele){
-        this.modele = modele;
+    public Coup coupAJouer(){
+        ArrayList<Coup> coupsPossibles = coupsJouables(configAct);
+        ArrayList<Coup> coupsPerdants = new ArrayList<>();
+        ArrayList<Coup> coupsGagnants = new ArrayList<>();
+
+        for(Coup c : coupsPossibles){
+            if(calculJoueurB(joue(c, configAct))){
+                coupsGagnants.add(c);
+            } else {
+                coupsPerdants.add(c);
+            }
+        }
+
+        Coup res;
+        int indice;
+
+        if(!coupsGagnants.isEmpty()){
+            indice = rand.nextInt(coupsGagnants.size());
+            res = coupsGagnants.get(indice);
+        } else {
+            indice = rand.nextInt(coupsPerdants.size());
+            res = coupsPerdants.get(indice);
+        }
+
+        System.out.println("COUPS GAGNANTS");
+        System.out.println(coupsGagnants);
+        System.out.println("Coups perdants: ");
+        System.out.println(coupsPerdants);
+
+
+        configAct.add(res);
+        return res;
     }
 
 
     ArrayList<Coup> joue(Coup c, ArrayList<Coup> config){
-        ArrayList<Coup> res = new ArrayList<>();
-        res = (ArrayList<Coup>) config.clone();
+        ArrayList<Coup> res;
+        if(config != null){
+            res = new ArrayList<>(config);
+        }else{
+            res = new ArrayList<>();
+        }
+
         res.add(c);
         return res;
     }
@@ -134,12 +142,14 @@ class ArbreEtOu implements IA {
     ArrayList<Coup> coupsJouables(ArrayList<Coup> coups){
         ArrayList<Coup> cj = new ArrayList<>();
         boolean jouable;
-        for(int i=0; i < modele.GetLine(); i++){
-            for(int j=0; j < modele.GetColonne(); j++){
+        for(int i=0; i < hauteur; i++){
+            for(int j=0; j < largeur; j++){
                 jouable = true;
-                for(Coup c : coups){
-                    if(i <= c.getLigne() && j >= c.getColonne()){
-                        jouable = false;
+                if(coups != null){
+                    for(Coup c : coups){
+                        if(i >= c.getLigne() && j >= c.getColonne()){
+                            jouable = false;
+                        }
                     }
                 }
                 if(jouable){
@@ -191,7 +201,7 @@ class ArbreEtOu implements IA {
         // Sinon Le joueur A doit jouer
         ArrayList<Coup> coups = coupsJouables(config); // Ensemble des coups jouables par A
             for(Coup c : coups){
-                if(calculJoueurA(joue(c,config))){
+                if(!calculJoueurA(joue(c,config))){
                     mem.put(noeudConfig, false);
                     return false;
                 }

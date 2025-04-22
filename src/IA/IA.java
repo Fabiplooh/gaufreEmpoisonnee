@@ -1,6 +1,6 @@
 package IA;
 
 public interface IA {
-    void coupAdversaire(int i, int j);
-
+    void coupAdversaire(Coup c);
+    Coup coupAJouer();
 }
