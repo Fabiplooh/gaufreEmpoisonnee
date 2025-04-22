@@ -2,8 +2,6 @@ package Vue;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
 
 import Modele.Jeu;
 
@@ -22,10 +20,6 @@ public class Panneau extends JPanel{
         BoutonRefais refait = new BoutonRefais(modele);
         refait.addActionListener(e->modele.redo());
         modele.addViewer(refait);
-
-        BoutonIA IA = new BoutonIA(modele);
-        //nouvelle.addActionListener();
-
 
         Affiche_joueur label = new Affiche_joueur(modele);
         modele.addViewer(label);

@@ -1,7 +1,6 @@
 package Vue;
 
 import javax.swing.*;
-import Modele.GaufreModele;
 import Modele.Jeu;
 
 import java.awt.event.*;
