@@ -223,7 +223,7 @@ public class GaufreModele {
     }
 
     public Cell lastMove(){
-        return my_history.previous.peek().getFirst();
+        return my_history.previous.peek().get(0);
     }
 
     public int getCurrentPlayerInt() {

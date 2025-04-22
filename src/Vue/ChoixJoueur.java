@@ -54,9 +54,6 @@ public class ChoixJoueur extends JDialog {
                         difficultyJ1=3;
                         break;
                 }
-                if ( difficultyJ1> -1) {
-                    menu.modele.addViewer(new Controleur_IA(menu.modele, 0, difficultyJ1));
-                }
                 int difficultyJ2 = -1;
                 switch (j2) {
                     case "Humain":
@@ -74,10 +71,20 @@ public class ChoixJoueur extends JDialog {
                         difficultyJ2=3;
                         break;
                 }
-                if ( difficultyJ2> -1) {
-                    menu.modele.addViewer(new Controleur_IA(menu.modele, 1, difficultyJ2));
+                if (difficultyJ1 != -1 || difficultyJ2 != -1 ){
+                    menu.modele.reset(1);
+
+                } else{
+                    menu.modele.reset();
                 }
-                menu.modele.reset();
+                if ( difficultyJ2> -1) {
+                    menu.modele.addPlayer(new Controleur_IA(menu.modele, 1, difficultyJ2));
+                }
+                if ( difficultyJ1> -1) {
+                    menu.modele.addPlayer(new Controleur_IA(menu.modele, 0, difficultyJ1));
+                }
+
+        
                 dispose();
                 menu.dispose();
             }

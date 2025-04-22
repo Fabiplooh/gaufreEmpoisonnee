@@ -7,7 +7,7 @@ import java.lang.module.Configuration;
 
 public class Jeu extends Observable {
     GaufreModele modele;
-    int typePlayers;
+    public int typePlayers;
     final private int HUMAN = 0;
     final public int IA = 1;
 
@@ -88,6 +88,7 @@ public class Jeu extends Observable {
     }
 
     public void reset(int typePlayers) {
+        clearPlayers();
         this.typePlayers = typePlayers;
         modele.reset();
         metAJour();

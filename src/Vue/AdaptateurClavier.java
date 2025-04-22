@@ -13,6 +13,8 @@ public class AdaptateurClavier extends KeyAdapter {
     
     @Override
     public void keyPressed(KeyEvent e){
-        menu.setVisible(true);
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            menu.setVisible(true);
+        }
     }
 }
