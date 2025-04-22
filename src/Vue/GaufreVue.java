@@ -4,6 +4,9 @@ import Modele.Jeu;
 import Patterns.*;
 
 import javax.swing.*;
+
+import Controleur.AdaptateurSouris;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

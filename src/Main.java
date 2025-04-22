@@ -3,6 +3,10 @@ import Vue.Menu;
 import Modele.Jeu;
 import Global.OurConfiguration;
 import javax.swing.*;
+
+import Controleur.AdaptateurClavier;
+import Controleur.AdaptateurSouris;
+
 import java.awt.*;
 
 public class Main implements Runnable {

@@ -1,6 +1,8 @@
-package Vue;
+package Controleur;
 
 import java.awt.event.*;
+
+import Vue.Menu;
 
 public class AdaptateurClavier extends KeyAdapter {
     Menu menu;

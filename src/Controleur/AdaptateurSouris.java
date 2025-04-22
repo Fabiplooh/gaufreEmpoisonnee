@@ -1,8 +1,9 @@
-package Vue;
+package Controleur;
 
 import java.awt.event.*;
 
 import Modele.Jeu;
+import Vue.GaufreVue;
 
 public class AdaptateurSouris extends MouseAdapter {
     GaufreVue vue;
