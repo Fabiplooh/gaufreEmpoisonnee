@@ -103,6 +103,10 @@ public abstract class ArbreEtOu implements IA {
         return coup;
     }
 
+    public void annulerDernierCoup(){
+        configAct.remove(configAct.size()-1);
+    }
+
 
     private ArrayList<Coup> joue(Coup c, ArrayList<Coup> config){
         ArrayList<Coup> res;

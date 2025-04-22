@@ -50,4 +50,8 @@ public class IARandom implements IA {
         coups.add(cj.get(r));
         return cj.get(r);
     }
+
+    public void annulerDernierCoup(){
+        coups.remove(coups.size()-1);
+    }
 }
