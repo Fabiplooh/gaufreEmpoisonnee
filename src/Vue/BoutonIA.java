@@ -1,15 +1,19 @@
 package Vue;
 
 import Modele.GaufreModele;
+import Patterns.Observateur;
 import javax.swing.*;
 
-public class BoutonCharge extends JButton {
+public class BoutonIA extends JButton {
+
     GaufreModele modele;
 
 
-    public BoutonCharge(GaufreModele m) {
+    public BoutonIA(GaufreModele m) {
         modele = m;
-        setText("Load");
+
+        setText("AI");
         setEnabled(true);
     }
+
 }

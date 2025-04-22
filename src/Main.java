@@ -1,6 +1,6 @@
-import Vue.AdaptateurSouris;
-import Modele.GaufreModele;
 import Vue.*;
+import Vue.Menu;
+import Modele.GaufreModele;
 import Global.OurConfiguration;
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +34,7 @@ public class Main implements Runnable {
 
         GaufreVue vue = new GaufreVue(modele);
         AdaptateurSouris souris = new AdaptateurSouris(vue, modele);
-
+        
         vue.setAdaptateurSouris(souris);
 
         frame.add(vue, BorderLayout.CENTER);
@@ -42,8 +42,11 @@ public class Main implements Runnable {
         // panneau du bas
         Panneau panneau = new Panneau(modele);
         frame.add(panneau, BorderLayout.SOUTH);
+
+        Menu menu = new Menu(modele);
+        AdaptateurClavier clavier = new AdaptateurClavier(menu);
+        frame.addKeyListener(clavier);
+        menu.addKeyListener(clavier);
+        menu.setVisible(false);
     }
-
-
-
 }
