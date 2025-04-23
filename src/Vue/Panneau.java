@@ -15,15 +15,17 @@ public class Panneau extends JPanel{
 
         BoutonAnnule annuler = new BoutonAnnule(modele);
         annuler.addActionListener(e->modele.undo());
+        annuler.setFocusable(false);
         modele.addViewer(annuler);
 
         BoutonRefais refait = new BoutonRefais(modele);
         refait.addActionListener(e->modele.redo());
+        refait.setFocusable(false);
         modele.addViewer(refait);
 
         Affiche_joueur label = new Affiche_joueur(modele);
         modele.addViewer(label);
-        
+
         this.add(annuler);
         this.add(refait);
         this.add(label);
