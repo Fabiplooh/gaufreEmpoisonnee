@@ -39,7 +39,7 @@ public class Controleur_IA implements Observateur {
     @Override
     public void miseAJour() {
         Coup coup;
-        if (modele.getCurrentPlayerInt() == whoIAm) {
+        if (modele.getCurrentPlayerInt() == whoIAm && !modele.isFin()) {
             try {
                 coup = new Coup(modele.lastMove().line, modele.lastMove().column);
                 IA.coupAdversaire(coup);
